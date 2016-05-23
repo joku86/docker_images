@@ -1,0 +1,14 @@
+FROM alpine:latest
+MAINTAINER johannk
+
+
+# setup jdk 
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk add --update \
+    curl openjdk8 openssh ruby bash cracklib-words supervisor procps 
+   
+ENV JAVA_HOME /usr/lib/jvm/default-jvm 
+ENV PATH ${JAVA_HOME}/bin:${PATH}
+
+ 
+ 

@@ -1,0 +1,23 @@
+FROM alpine:latest
+MAINTAINER johannk
+
+# setup jdk 
+RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && apk add --update \
+    curl openjdk8 openssh ruby bash cracklib-words supervisor procps 
+   
+ENV JAVA_HOME /usr/lib/jvm/default-jvm 
+ENV PATH ${JAVA_HOME}/bin:${PATH}
+
+#Setup default Zookeeper
+RUN curl "http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz" \
+	| tar -C /usr/local/ -xz \
+	&& echo $'tickTimetickTime=2000\ndataDir=/var/zookeeper\nclientPort=2181' > /usr/local/zookeeper-3.4.8/conf/zoo.cfg
+	
+	
+ENV ZOOKEEPER_HOME /usr/local/zookeeper-3.4.8 	
+ENV PATH ${ZOOKEEPER_HOME}/bin:${PATH}
+
+#run this inside container
+# zkServer.sh start
+ 
