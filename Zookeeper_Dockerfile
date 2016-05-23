@@ -4,15 +4,15 @@ MAINTAINER johannk
 # setup jdk 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --update \
-    curl openjdk8 openssh ruby bash cracklib-words supervisor procps 
+    curl openjdk8-jre-base bash
    
-ENV JAVA_HOME /usr/lib/jvm/default-jvm 
-ENV PATH ${JAVA_HOME}/bin:${PATH}
+ENV JRE_HOME /usr/lib/jvm/default-jvm/jre 
+ENV PATH ${JRE_HOME}/bin:${PATH}
 
 #Setup default Zookeeper
 RUN curl "http://apache.mirrors.pair.com/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz" \
 	| tar -C /usr/local/ -xz \
-	&& echo $'tickTimetickTime=2000\ndataDir=/var/zookeeper\nclientPort=2181' > /usr/local/zookeeper-3.4.8/conf/zoo.cfg
+	&& echo $'tickTimetickTime=2000\ndataDir=/var/zookeeper\nclientPort=2181' > /usr/local/zookeeper-3.4.8/conf/zoo.cfg 
 	
 	
 ENV ZOOKEEPER_HOME /usr/local/zookeeper-3.4.8 	
