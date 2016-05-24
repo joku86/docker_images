@@ -5,10 +5,19 @@ MAINTAINER johannk
 # setup jdk 
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --update \
-    curl openjdk8 openssh ruby bash cracklib-words supervisor procps 
+   curl openjdk8-jre-base bash \
+    && rm /var/cache/apk/*
    
-ENV JAVA_HOME /usr/lib/jvm/default-jvm 
-ENV PATH ${JAVA_HOME}/bin:${PATH}
+ENV JRE_HOME /usr/lib/jvm/default-jvm/jre 
+ENV PATH ${JRE_HOME}/bin:${PATH}
 
+#Setup kafka
+RUN curl "http://apache.mirrors.spacedump.net/kafka/0.9.0.1/kafka_2.10-0.9.0.1.tgz" \
+	| tar -C /usr/local/ -xz  \
+	&& echo $'brocker.id=0\nlog.dir=/tmp/kafka-logs\nzookeeper.connect=zookeeper:2181' > /usr/local/kafka_2.10-0.9.0.1/config/server.properties
+	
+VOLUME [ "/tmp" ]
+
+ 
  
  
