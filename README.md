@@ -13,9 +13,9 @@ create network
 
 start the container inside the created network  
 
-> docker run -itd --net=networkname --name zookeeper -h zookeeper zookeeper /bin/bash    
+> docker run -itd -P --net=networkname --name zookeeper -h zookeeper zookeeper /bin/bash    
 
 Second container:
 
-> docker run -itd --net=networkname --name kafka -h kafka kafka /bin/bash
+> docker run -itd -P --net=networkname --name kafka -h kafka kafka /bin/bash
 
