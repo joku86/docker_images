@@ -14,7 +14,10 @@ ENV PATH ${JRE_HOME}/bin:${PATH}
 #Setup kafka
 RUN curl "http://apache.mirrors.spacedump.net/kafka/0.9.0.1/kafka_2.10-0.9.0.1.tgz" \
 	| tar -C /usr/local/ -xz  \
-	&& echo $'brocker.id=0\nlog.dir=/tmp/kafka-logs\nzookeeper.connect=zookeeper:2181' > /usr/local/kafka_2.10-0.9.0.1/config/server.properties
+	&& echo $'brocker.id=0\nlisteners=PLAINTEXT://:9092\nlog.dir=/tmp/kafka-logs\nzookeeper.connect=zookeeper:2181' > /usr/local/kafka_2.10-0.9.0.1/config/server.properties
+#PseudoDistributed mode preconfiguration
+#RUN echo $'brocker.id=1\nport=9093\nlog.dir=/tmp/kafka-logs-1' > /usr/local/kafka_2.10-0.9.0.1/config/server-1.properties \
+#&&	echo $'brocker.id=2\nport=9094\nlog.dir=/tmp/kafka-logs-2' > /usr/local/kafka_2.10-0.9.0.1/config/server-2.properties
 	
 VOLUME [ "/tmp" ]
 

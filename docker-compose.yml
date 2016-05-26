@@ -1,0 +1,24 @@
+version: '2'
+services:
+  hadoop:
+    build:
+      context: ./yarn
+    container_name: master
+    hostname: master
+    networks:
+    - pocsp
+  hadoop1:
+    extends: hadoop
+    container_name: hadoop1
+    hostname: hadoop1
+    depends_on:
+    - hadoop
+  hadoop2:
+    extends: hadoop
+    container_name: hadoop2
+    hostname: hadoop2
+    depends_on:
+    - hadoop
+networks:
+  pocsp:
+    driver: bridge
