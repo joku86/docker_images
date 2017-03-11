@@ -1,0 +1,106 @@
+version: '2'
+services:
+  zookeeper:
+    build:
+      context: ./pocsp
+    image: pocsp
+    container_name: zookeeper
+    hostname: zookeeper
+    command: supervisord -c /etc/supervisord_zookeeper.conf
+    networks:
+    - pocsp
+    mem_limit: 1G
+    cpuset: '0'
+    cpu_shares: 50
+    ports:
+    - 22181:2181
+  kafka:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: kafka
+    hostname: kafka
+    command: supervisord -c /etc/supervisord_kafka.conf
+    mem_limit: 1G
+    cpuset: '0'
+    cpu_shares: 50
+    ports:
+    - 19092:9092
+  yarnrm:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    tty: true
+    stdin_open: true
+    container_name: yarnrm
+    hostname: yarnrm
+    cpuset: '2'
+    cpu_shares: 100
+    ports:
+    - 18088:8088
+    - 19888:19888
+    command: supervisord -c /etc/supervisord_yarnrm.conf
+    mem_limit: ${pocsp.yarnrm.mem}b
+  yarn1:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: yarn1
+    hostname: yarn1
+    ports:
+    - 18042:8042
+    command: supervisord -c /etc/supervisord_yarnnm.conf
+    mem_limit: ${pocsp.yarnnm.mem}b
+    cpuset: '3,4'
+    cpu_shares: 100
+  yarn2:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: yarn2
+    hostname: yarn2
+    ports:
+    - 18043:8042
+    command: supervisord -c /etc/supervisord_yarnnm.conf
+    mem_limit: ${pocsp.yarnnm.mem}b
+    cpuset: '5,6'
+    cpu_shares: 100 
+  inbound:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: inbound
+    hostname: inbound
+    ports:
+    - 28080:8080
+    command: supervisord -c /etc/supervisord_inbound.conf
+    mem_limit: 500M
+    cpuset: '1'
+    cpu_shares: 50    
+  outbound:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: outbound
+    hostname: outbound
+    ports:
+    - 38080:8080
+    command: supervisord -c /etc/supervisord_outbound.conf
+    mem_limit: 500M
+    cpuset: '1'
+    cpu_shares: 50        
+networks:
+  pocsp:
+    driver: bridge

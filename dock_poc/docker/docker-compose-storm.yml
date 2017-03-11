@@ -1,0 +1,103 @@
+version: '2'
+services:
+  zookeeper:
+    build:
+      context: ./pocsp
+    image: pocsp
+    container_name: zookeeper
+    hostname: zookeeper
+    command: supervisord -c /etc/supervisord_zookeeper.conf
+    networks:
+    - pocsp
+    mem_limit: 1G
+    cpuset: '0'
+    cpu_shares: 50
+    ports:
+    - 22181:2181
+  kafka:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: kafka
+    hostname: kafka
+    command: supervisord -c /etc/supervisord_kafka.conf
+    mem_limit: 1500M
+    cpuset: '0'
+    cpu_shares: 50
+    ports:
+    - 19092:9092
+  nimbus:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: nimbus
+    hostname: nimbus
+    command: supervisord -c /etc/supervisord_nimbus.conf
+    ports:
+    - 18080:8080
+    mem_limit: 2G
+    cpuset: '2'
+    cpu_shares: 100
+  stormsv1:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: stormsv1
+    hostname: stormsv1
+    command: supervisord -c /etc/supervisord_stormsv.conf
+    mem_limit: 4G
+    cpuset: '3,4'
+    cpu_shares: 100
+    ports:
+    - 18001:8000
+  stormsv2:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: stormsv2
+    hostname: stormsv2
+    command: supervisord -c /etc/supervisord_stormsv.conf
+    mem_limit: 4G
+    cpuset: '5,6'
+    cpu_shares: 100
+    ports:
+    - 18002:8000
+  inbound:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: inbound
+    hostname: inbound
+    ports:
+    - 28080:8080
+    command: supervisord -c /etc/supervisord_inbound.conf
+    mem_limit: 500M
+    cpuset: '1'
+    cpu_shares: 50    
+  outbound:
+    build:
+      context: ./pocsp
+    image: pocsp
+    networks:
+    - pocsp
+    container_name: outbound
+    hostname: outbound
+    ports:
+    - 38080:8080
+    command: supervisord -c /etc/supervisord_outbound.conf
+    mem_limit: 500M
+    cpuset: '1'
+    cpu_shares: 50            
+networks:
+  pocsp:
+    driver: bridge
